@@ -109,8 +109,29 @@
     </div>
 </div>
 
+</div>
 <script>
     function animate(options) {
+        var start = performance.now();
+
+        requestAnimationFrame(function animate(time) {
+            // timeFraction от 0 до 1
+            var timeFraction = (time - start) / options.duration;
+//            if (timeFraction > 1) timeFraction = 1;
+
+            // текущее состояние анимации
+            var progress = options.timing(timeFraction);
+
+            options.draw(progress);
+
+            if (timeFraction < 1) {
+                requestAnimationFrame(animate);
+            }
+
+        });
+    }
+
+    function animate2(options) {
         var start = performance.now();
 
         requestAnimationFrame(function animate(time) {
@@ -155,17 +176,14 @@
                 function scrollTopTiming() {
 
                         animate({
-                            duration: 2000,
-//                            timing: function quad(progress) {
-//                                return Math.pow(progress, 2)
-//                            },
+                            duration: 3000,
                             timing: function quad(progress) {
-                                return Math.pow(progress, 2)
+                                return progress<.5 ? 2*progress*progress : -1+(4-2*progress)*progress
+
                             },
                             draw: function(progress) {
-                                window.scrollTo(0, startScroll);
-                                startScroll = startScroll + (progress * (scroll - startScroll));
-                                console.log(progress * 10);
+                                window.scrollTo(0, (startScroll + (progress * (scroll - startScroll))));
+//                                startScroll = startScroll + (progress * (scroll - startScroll));
                             }
                         });
                 }
@@ -184,9 +202,9 @@
                 function scrollDownTiming() {
 
                     animate({
-                        duration: 2000,
+                        duration: 3000,
                         timing: function quad(progress) {
-                            return Math.pow(progress, 2)
+                            return progress<.5 ? 2*progress*progress : -1+(4-2*progress)*progress
                         },
                         draw: function(progress) {
                             window.scrollTo(0, startScroll);
@@ -204,7 +222,6 @@
         sectionOffset[0].classList.add('active', 'load');
 
         var menuChildren = menu.getElementsByTagName('a');
-        console.log(menuChildren);
         menuChildren[0].classList.add('active');
 
 

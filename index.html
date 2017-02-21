@@ -131,25 +131,6 @@
         });
     }
 
-    function animate2(options) {
-        var start = performance.now();
-
-        requestAnimationFrame(function animate(time) {
-            // timeFraction от 0 до 1
-            var timeFraction = (time - start) / options.duration;
-//            if (timeFraction > 1) timeFraction = 1;
-
-            // текущее состояние анимации
-            var progress = options.timing(timeFraction);
-
-            options.draw(progress);
-
-            if (timeFraction < 1) {
-                requestAnimationFrame(animate);
-            }
-
-        });
-    }
 
     var mainNavagation = function (linksmenu, sections) {
 
@@ -183,7 +164,6 @@
                             },
                             draw: function(progress) {
                                 window.scrollTo(0, (startScroll + (progress * (scroll - startScroll))));
-//                                startScroll = startScroll + (progress * (scroll - startScroll));
                             }
                         });
                 }
@@ -207,8 +187,7 @@
                             return progress<.5 ? 2*progress*progress : -1+(4-2*progress)*progress
                         },
                         draw: function(progress) {
-                            window.scrollTo(0, startScroll);
-                            startScroll = startScroll - (progress * (startScroll - scroll));
+                            window.scrollTo(0, (startScroll - (progress * (startScroll - scroll))));
                         }
                     });
                 }
